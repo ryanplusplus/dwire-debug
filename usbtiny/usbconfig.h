@@ -325,7 +325,7 @@ extern void usbEventResetReady(void);
 */
 
 // debugWIRE bit normally 5, but can be changed for debugging
-#define DW_BIT 2
+#define DW_BIT 5
 
 #ifdef __ASSEMBLER__
 macro nonUsbPinChange
