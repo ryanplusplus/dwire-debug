@@ -194,7 +194,18 @@ void digisparkUSBSendBytes(struct UPort *up, u8 state, char *out, int outlen) {
     status = usb_control_msg(up->handle, OUT_TO_LW, 60, state, 0, out, outlen, USB_TIMEOUT);
   }
   if (status < outlen) {Ws("Failed to send bytes to AVR, status "); Wd(status,1); PortFail(up, "");}
+  //check if SPM is in command
+  char spmPattern[]= {0x95,0xE8};
+  int spmPatternLen = 2;
+  bool spmFound = false;
+  for (int i=0;i<outlen-spmPatternLen+1;i++){
+    if (memcmp(spmPattern,out+i,spmPatternLen)==0){
+      printf("SPM FOUND\n");
+      spmFound = true;
+    }
+  }
   delay(3); // Wait at least until digispark starts to send the data.
+  if (spmFound) delay(10);
 }
 
 
