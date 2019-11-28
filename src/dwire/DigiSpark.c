@@ -203,8 +203,10 @@ void digisparkUSBSendBytes(struct UPort *up, u8 state, char *out, int outlen) {
       spmFound = true;
     }
   }
-  delay(3); // Wait at least until digispark starts to send the data.
-  if (spmFound) delay(10);
+  //calculate time needed for dw commnucation
+  int sendTime = (outlen*10*1030)/up->port.baud; //use 1030 instead of 1000 for 3% safe margin
+  delay(sendTime+2); // Wait at least until digispark starts to send the data.
+  if (spmFound) delay(5);
 }
 
 
