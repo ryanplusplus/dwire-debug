@@ -203,10 +203,24 @@ void digisparkUSBSendBytes(struct UPort *up, u8 state, char *out, int outlen) {
       spmFound = true;
     }
   }
+  bool pgersAndPgwrtFound = false;
+  char setR29ToPGERSPattern[]= {0x64,0xD2,0xB7,0xD1,0x23,0x03};
+  int setR29ToPGERSPatternLen = 6;
+  char setR29ToPGWRTPattern[]= {0x64,0xD2,0xB7,0xD1,0x23,0x05};
+  int setR29ToPGWRTPatternLen = 6;  
+  for (int i=0;i<outlen-setR29ToPGERSPatternLen+1;i++){
+    if (memcmp(setR29ToPGERSPattern,out+i,setR29ToPGERSPatternLen)==0){
+      pgersAndPgwrtFound = true;
+    }
+    if (memcmp(setR29ToPGWRTPattern,out+i,setR29ToPGWRTPatternLen)==0){
+      pgersAndPgwrtFound = true;
+    }
+  }
+
   //calculate time needed for dw commnucation
-  int sendTime = (outlen*10*1030)/up->port.baud; //use 1030 instead of 1000 for 3% safe margin
+  int sendTime = (outlen*10*1000)/up->port.baud; 
   delay(sendTime+2); // Wait at least until digispark starts to send the data.
-  if (spmFound) delay(5);
+  if (spmFound && pgersAndPgwrtFound) delay(5);
 }
 
 
