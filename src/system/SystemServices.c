@@ -31,7 +31,7 @@
 #ifdef __APPLE__
   #include <termios.h>
 #else
-  #include <stropts.h>
+  // #include <stropts.h>
   #include <asm/termios.h>
 #endif
   #include <setjmp.h>

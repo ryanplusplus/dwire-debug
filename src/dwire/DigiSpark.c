@@ -22,6 +22,7 @@
 // will abort a pending wait.
 
 
+#include <stdbool.h>
 
 #define USB_TIMEOUT 5000
 #define OUT_TO_LW   USB_TYPE_VENDOR | USB_RECIP_DEVICE | USB_ENDPOINT_OUT
@@ -207,7 +208,7 @@ void digisparkUSBSendBytes(struct UPort *up, u8 state, char *out, int outlen) {
   char setR29ToPGERSPattern[]= {0x64,0xD2,0xB7,0xD1,0x23,0x03};
   int setR29ToPGERSPatternLen = 6;
   char setR29ToPGWRTPattern[]= {0x64,0xD2,0xB7,0xD1,0x23,0x05};
-  int setR29ToPGWRTPatternLen = 6;  
+  int setR29ToPGWRTPatternLen = 6;
   for (int i=0;i<outlen-setR29ToPGERSPatternLen+1;i++){
     if (memcmp(setR29ToPGERSPattern,out+i,setR29ToPGERSPatternLen)==0){
       pgersAndPgwrtFound = true;
@@ -218,7 +219,7 @@ void digisparkUSBSendBytes(struct UPort *up, u8 state, char *out, int outlen) {
   }
 
   //calculate time needed for dw commnucation
-  int sendTime = (outlen*10*1000)/up->port.baud; 
+  int sendTime = (outlen*10*1000)/up->port.baud;
   delay(sendTime+2); // Wait at least until digispark starts to send the data.
   if (spmFound && pgersAndPgwrtFound) delay(5);
 }
